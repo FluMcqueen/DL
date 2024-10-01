@@ -13,7 +13,6 @@ import numpy as np
 import tensorflow as tf
 
 
-
 wav_dir = "Benjamin_Netanyau/189.wav"
 obj = wave.open(wav_dir, 'rb')
 
@@ -54,11 +53,14 @@ def path_to_audio(path):
 
 a = path_to_audio(wav_dir)
 print(a)
+print(type(a))
 print("-"*42)
 
 pt = tf.make_tensor_proto(a)
 arr = tf.make_ndarray(pt)
 print(arr)
+print(type(arr))
+print(np.shape(arr))
 
 plt.figure(figsize=(15,5))
 plt.plot(time, arr)
