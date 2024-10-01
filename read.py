@@ -54,3 +54,16 @@ def path_to_audio(path):
 
 a = path_to_audio(wav_dir)
 print(a)
+print("-"*42)
+
+pt = tf.make_tensor_proto(a)
+arr = tf.make_ndarray(pt)
+print(arr)
+
+plt.figure(figsize=(15,5))
+plt.plot(time, arr)
+plt.title("Audio")
+plt.ylabel("Signal Wave")
+plt.xlabel("Time")
+plt.xlim(0, tempo)
+plt.show()
