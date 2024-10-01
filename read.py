@@ -10,6 +10,8 @@ Audio par
 import wave
 import matplotlib.pyplot as plt
 import numpy as np
+import tensorflow as tf
+
 
 
 wav_dir = "Benjamin_Netanyau/189.wav"
@@ -43,3 +45,13 @@ plt.ylabel("Signal Wave")
 plt.xlabel("Time")
 plt.xlim(0, tempo)
 plt.show()
+
+def path_to_audio(path):
+    """Reads and decodes an audio file."""
+    audio = tf.io.read_file(path)
+    audio, _ = tf.audio.decode_wav(audio, 1, freq)
+    return audio
+
+
+a = path_to_audio(wav_dir)
+print(a)
