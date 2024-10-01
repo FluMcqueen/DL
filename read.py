@@ -34,8 +34,8 @@ signal_wave = obj.readframes(-1)
 
 obj.close()
 
-signal_array = np.frombuffer(signal_wave, dtype=np.int16)
-time = np.linspace(0, tempo, num=nsample)
+signal_array = np.frombuffer(signal_wave, dtype=np.int16) #cercare cosa fa
+time = np.linspace(0, tempo, num=nsample) #cercare cosa fa
 
 plt.figure(figsize=(15,5))
 plt.plot(time, signal_array)
@@ -45,10 +45,11 @@ plt.xlabel("Time")
 plt.xlim(0, tempo)
 plt.show()
 
-def path_to_audio(path):
-    """Reads and decodes an audio file."""
+def path_to_audio(path): 
+    #Decode a 16-bit PCM WAV file to a float tensor
     audio = tf.io.read_file(path)
     audio, _ = tf.audio.decode_wav(audio, 1, freq)
+    #input 16bit pcm wav file, output tensore con valori float [-1,1]
     return audio
 
 a = path_to_audio(wav_dir)
