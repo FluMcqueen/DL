@@ -52,6 +52,5 @@ def path_to_audio(path):
     audio, _ = tf.audio.decode_wav(audio, 1, freq)
     return audio
 
-
 a = path_to_audio(wav_dir)
 print(a)
