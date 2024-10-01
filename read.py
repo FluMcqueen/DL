@@ -9,7 +9,7 @@ Audio par
 '''
 import wave
 import matplotlib.pyplot as plt
-import import numpy as np
+import numpy as np
 
 
 wav_dir = "Benjamin_Netanyau/189.wav"
@@ -29,12 +29,12 @@ print("-"*42)
 
 freq = obj.getframerate()
 nsample = obj.getnframes()
-signal_wave = obj.readframes()
+signal_wave = obj.readframes(-1)
 
 obj.close()
 
-signal_array = np.frombuffer(signal_wave, dtype=np.int128)
-time = np.linespace(0, tempo, num=nsample)
+signal_array = np.frombuffer(signal_wave, dtype=np.int16)
+time = np.linspace(0, tempo, num=nsample)
 
 plt.figure(figsize=(15,5))
 plt.plot(time, signal_array)
