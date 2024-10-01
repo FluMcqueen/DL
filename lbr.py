@@ -13,6 +13,6 @@ stf=lbr.stft(sig)
 spec = np.abs(stf)
 spec_db = lbr.amplitude_to_db(spec)
 
-plt.figure(figsize=(15,7))
+plt.figure(figsize=(12,7))
 img = lbr.display.specshow(spec_db, y_axis="log", x_axis="time", sr=sample_rate, cmap="inferno")
-plt.show()
+plt.savefig("img.png")
