@@ -17,7 +17,7 @@ wav_dir = "Benjamin_Netanyau/189.wav"
 obj = wave.open(wav_dir, 'rb')
 
 print("Number of channels", obj.getnchannels())
-print("Sample", obj.getsampwidth()) #2 bytes for each sample
+print("Sample width", obj.getsampwidth()) #2 bytes for each sample quindi 16bit
 print("Frame Rate", obj.getframerate())
 print("Number of frames", obj.getnframes())
 print("-"*42)
