@@ -50,7 +50,7 @@ plt.show()
 # plt.savefig("tutwav.png")
 
 FRAME_SIZE = 1024
-HOP_LENGHT = 512
+HOP_LENGTH = 512
 
 def amplitude_envelope(signal, frame_size, hop_length):
     """Fancier Python code to calculate the amplitude envelope of a signal with a given frame size."""
