@@ -35,21 +35,25 @@ metal, _ = lbr.load(metal_wav)
 
 print(f"Sample duration {1/sr:.6f} seconds")
 
+'''
 plt.figure(figsize=(15,17))
 
 plt.subplot(2,1,1)
-librosa.display.waveshow(classical)
+librosa.display.waveshow(classical, alpha=0.5)
+plt.ylim((-1, 1))
 plt.title("Class")
 
 plt.subplot(2,1,2)
-librosa.display.waveshow(metal)
+librosa.display.waveshow(metal, alpha=0.5)
+plt.ylim((-1, 1))
 plt.title("Metal")
 
 plt.show()
 
-# plt.savefig("tutwav.png")
+plt.savefig("tutwav.png")
+'''
 
-FRAME_SIZE = 1024
+FRAME_SIZE = 2048
 HOP_LENGTH = 512
 
 def amplitude_envelope(signal, frame_size, hop_length):
@@ -65,6 +69,7 @@ tcl = librosa.frames_to_time(frames, hop_length=HOP_LENGTH)
 framesm = range(len(ae_metal))
 tm = librosa.frames_to_time(framesm, hop_length=HOP_LENGTH)
 
+'''
 plt.figure(figsize=(15, 17))
 
 ax = plt.subplot(2, 1, 1)
@@ -80,3 +85,26 @@ plt.ylim((-1, 1))
 plt.title("Metal")
 
 plt.savefig("ae.png")
+'''
+
+rms_clas = lbr.feature.rms(y = classical, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
+rms_metal = lbr.feature.rms(y = metal, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
+
+framesmr = range(len(rms_metal))
+tmr = librosa.frames_to_time(framesmr, hop_length=HOP_LENGTH)
+
+plt.figure(figsize=(15, 17))
+
+ax = plt.subplot(2, 1, 1)
+librosa.display.waveshow(classical, alpha=0.5)
+plt.plot(tcl, rms_clas, color="r")
+plt.ylim((-1, 1))
+plt.title("Classical")
+
+plt.subplot(2, 1, 2)
+librosa.display.waveshow(metal, alpha=0.5)
+plt.plot(tmr, rms_metal, color="r")
+plt.ylim((-1, 1))
+plt.title("Metal")
+
+plt.savefig("rms.png")
