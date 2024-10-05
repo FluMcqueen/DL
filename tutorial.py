@@ -93,6 +93,7 @@ rms_metal = lbr.feature.rms(y = metal, frame_length=FRAME_SIZE, hop_length=HOP_L
 framesmr = range(len(rms_metal))
 tmr = librosa.frames_to_time(framesmr, hop_length=HOP_LENGTH)
 
+'''
 plt.figure(figsize=(15, 17))
 
 ax = plt.subplot(2, 1, 1)
@@ -108,3 +109,7 @@ plt.ylim((-1, 1))
 plt.title("Metal")
 
 plt.savefig("rms.png")
+'''
+
+zcr_classical = librosa.feature.zero_crossing_rate(classical, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
+zcr_metal = librosa.feature.zero_crossing_rate(metal, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
