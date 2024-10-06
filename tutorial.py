@@ -113,3 +113,26 @@ plt.savefig("rms.png")
 
 zcr_classical = librosa.feature.zero_crossing_rate(classical, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
 zcr_metal = librosa.feature.zero_crossing_rate(metal, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
+
+sp_classical = lbr.stft(classical, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)
+sp_metal = lbr.stft(metal, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)
+
+print("-"*42)
+print(sp_classical.shape) #nfreqency bins, nframes
+print(sp_metal.shape)
+
+Y_scale = np.abs(sp_classical) ** 2
+Y_classical = lbr.power_to_db(Y_scale)
+
+Y_scale = np.abs(sp_metal) ** 2
+Y_metal = lbr.power_to_db(Y_scale)
+
+def plot (Y, sr, hl, nome):
+    plt.figure(figsize=(25,10))
+    librosa.display.specshow(Y, y_axis="log", x_axis="time", sr=sr, hop_length=hl)
+    plt.colorbar(format="%+2.f")
+    plt.savefig(f"sp_{nome}.png")
+
+
+plot(Y_classical, sr, HOP_LENGTH, "classical")
+plot(Y_metal, sr, HOP_LENGTH, "metal")
