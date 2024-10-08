@@ -11,6 +11,7 @@ import numpy as np
 import librosa as lbr
 import librosa.display
 import wave
+import math
 import matplotlib.pyplot as plt
 
 
@@ -120,6 +121,7 @@ sp_metal = lbr.stft(metal, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)
 print("-"*42)
 print(sp_classical.shape) #nfreqency bins, nframes
 print(sp_metal.shape)
+print("-"*42)
 
 Y_scale = np.abs(sp_classical) ** 2
 Y_classical = lbr.power_to_db(Y_scale)
@@ -184,5 +186,44 @@ delta2_met = lbr.feature.delta(mfc_metal, order=2)
 
 print(delta_clas.shape)
 
-comp_delta_clas = np.concatenate({mfc_clas, delta_clas, delta2_clas})
-comp_delta_metal = np.concatenate({mfc_metal, delta_met, delta2_met})
+comp_delta_clas = np.concatenate((mfc_clas, delta_clas, delta2_clas))
+comp_delta_metal = np.concatenate((mfc_metal, delta_met, delta2_met))
+
+def calculate_split_frequency_bin(split_frequency, sample_rate, num_frequency_bins):
+    """Infer the frequency bin associated to a given split frequency."""
+    
+    frequency_range = sample_rate / 2
+    frequency_delta_per_bin = frequency_range / num_frequency_bins
+    split_frequency_bin = math.floor(split_frequency / frequency_delta_per_bin)
+    return int(split_frequency_bin)
+
+split_frequency_bin = calculate_split_frequency_bin(2000, sr, 1025)
+
+def band_energy_ratio(spectrogram, split_frequency, sample_rate):
+    """Calculate band energy ratio with a given split frequency."""
+    
+    split_frequency_bin = calculate_split_frequency_bin(split_frequency, sample_rate, len(spectrogram[0]))
+    band_energy_ratio = []
+    
+    # calculate power spectrogram
+    power_spectrogram = np.abs(spectrogram) ** 2
+    power_spectrogram = power_spectrogram.T
+    
+    # calculate BER value for each frame
+    for frame in power_spectrogram:
+        sum_power_low_frequencies = frame[:split_frequency_bin].sum()
+        sum_power_high_frequencies = frame[split_frequency_bin:].sum()
+        band_energy_ratio_current_frame = sum_power_low_frequencies / sum_power_high_frequencies
+        band_energy_ratio.append(band_energy_ratio_current_frame)
+    
+    return np.array(band_energy_ratio)
+
+
+ber_clas = band_energy_ratio(sp_classical, 2000, sr)
+ber_metal = band_energy_ratio(sp_metal, 2000, sr)
+
+sc_clas = librosa.feature.spectral_centroid(y=classical, sr=sr, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
+sc_metal = librosa.feature.spectral_centroid(y=metal, sr=sr, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
+
+ban_clas = librosa.feature.spectral_bandwidth(y=classical, sr=sr, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
+ban_metal = librosa.feature.spectral_bandwidth(y=metal, sr=sr, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
