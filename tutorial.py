@@ -152,6 +152,7 @@ mspec_metal = lbr.feature.melspectrogram(y=metal, sr=sr, n_fft=FRAME_SIZE, hop_l
 mspec_clas = lbr.power_to_db(mspec_clas)
 mspec_metal = lbr.power_to_db(mspec_metal)
 
+'''
 def mplot (Y, sr, hl, nome):
     plt.figure(figsize=(25,10))
     librosa.display.specshow(Y, y_axis="mel", x_axis="time", sr=sr, hop_length=hl, cmap="inferno")
@@ -161,3 +162,27 @@ def mplot (Y, sr, hl, nome):
 
 mplot(mspec_clas, sr=sr, hl=HOP_LENGTH, nome="classical")
 mplot(mspec_metal, sr=sr, hl=HOP_LENGTH, nome="metal")
+'''
+
+mfc_clas = lbr.feature.mfcc(y=classical, sr=sr, n_mfcc=13)
+mfc_metal = lbr.feature.mfcc(y=metal, sr=sr, n_mfcc=13)
+
+def mfccplot (Y, sr, nome):
+    plt.figure(figsize=(25,10))
+    librosa.display.specshow(Y, x_axis="time", sr=sr, cmap="inferno")
+    plt.colorbar(format="%+2.f")
+    plt.savefig(f"mfcc_{nome}.png")
+
+
+mfccplot(mfc_clas, sr=sr, nome="classical")
+mfccplot(mfc_metal, sr=sr, nome="metal")
+
+delta_clas = lbr.feature.delta(mfc_clas)
+delta2_clas = lbr.feature.delta(mfc_clas, order=2)
+delta_met = lbr.feature.delta(mfc_metal)
+delta2_met = lbr.feature.delta(mfc_metal, order=2)
+
+print(delta_clas.shape)
+
+comp_delta_clas = np.concatenate({mfc_clas, delta_clas, delta2_clas})
+comp_delta_metal = np.concatenate({mfc_metal, delta_met, delta2_met})
