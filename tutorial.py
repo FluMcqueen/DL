@@ -133,6 +133,31 @@ def plot (Y, sr, hl, nome):
     plt.colorbar(format="%+2.f")
     plt.savefig(f"sp_{nome}.png")
 
-
+'''
 plot(Y_classical, sr, HOP_LENGTH, "classical")
 plot(Y_metal, sr, HOP_LENGTH, "metal")
+
+
+filt = lbr.filters.mel(sr=sr, n_fft=FRAME_SIZE)
+
+plt.figure(figsize=(25,10))
+librosa.display.specshow(filt, sr=sr, x_axis="linear")
+plt.colorbar(format="%+2.f")
+plt.savefig(f"mspec.png")
+'''
+
+mspec_clas = lbr.feature.melspectrogram(y=classical, sr=sr, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)
+mspec_metal = lbr.feature.melspectrogram(y=metal, sr=sr, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)
+
+mspec_clas = lbr.power_to_db(mspec_clas)
+mspec_metal = lbr.power_to_db(mspec_metal)
+
+def mplot (Y, sr, hl, nome):
+    plt.figure(figsize=(25,10))
+    librosa.display.specshow(Y, y_axis="mel", x_axis="time", sr=sr, hop_length=hl, cmap="inferno")
+    plt.colorbar(format="%+2.f")
+    plt.savefig(f"msp_{nome}.png")
+
+
+mplot(mspec_clas, sr=sr, hl=HOP_LENGTH, nome="classical")
+mplot(mspec_metal, sr=sr, hl=HOP_LENGTH, nome="metal")
