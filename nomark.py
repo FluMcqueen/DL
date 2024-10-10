@@ -11,37 +11,29 @@ folders = ["blues", "classical", "country", "disco", "hiphop", "jazz", "metal", 
 hop = 512
 frame_size = 2048
 sr = 22050
-l_a = []
+l = []
 
 def spec(audio):
     return lbr.stft(audio, n_fft=frame_size, hop_length=hop)
 
-def lib(wav, lista):
+def lib(wav):
     try:
         signal, _ = lbr.load(wav)
         sp = spec(signal)
-        lista.append(sp)
-    except wave.Error as e:
+        l.append(sp.shape)
+    except :
         print(wav)
 
-for fol in folders[:4]:
+for fol in folders:
+    print("-"*42)
     for i in range(100):
         if i < 10:
             path = f"{fol}/{fol}.0000{i}.wav"
         else:
             path = f"{fol}/{fol}.000{i}.wav"
         #print(path)
-        lib(path, l_a)
+        lib(path)
 
-print("-"*42)
-
-l_b = []
-
-for fol in folders[4:7]:
-    for i in range(100):
-        if i < 10:
-            path = f"{fol}/{fol}.0000{i}.wav"
-        else:
-            path = f"{fol}/{fol}.000{i}.wav"
-        #print(path)
-        lib(path, l_b)
+for el in l:
+    if not el == (1025, 1293):
+        print(el)
