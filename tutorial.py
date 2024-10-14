@@ -15,8 +15,8 @@ import math
 import matplotlib.pyplot as plt
 
 
-classic_wav = "classical/classical.00000.wav"
-metal_wav = "metal/metal.00000.wav"
+classic_wav = "Modificati/classical/classical.00000.wav"
+metal_wav = "Modificati/metal/metal.00000.wav"
 
 def par(wav):
     obj = wave.open(wav, 'rb')
